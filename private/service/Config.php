@@ -32,19 +32,26 @@ class Config
     private string $password;
 
 
+    /**
+     * Config constructor.
+     */
     public function __construct()
     {
         $this->setConfigFile(require('../private/config/config.php'));
-        $this->hydrate($this->configFile);
+        $this->hydrateDb($this->configFile);
     }
 
-    private function hydrate($config) {
+    /**
+     * @param array $config
+     */
+    private function hydrateDb(array $config) {
         foreach ($config['database'] as $k => $v) {
             $dbSettersName = 'set'.ucfirst($k);
-            $this->$dbSettersName = $v;
+            if(method_exists($this, $dbSettersName)){
+                $this->$dbSettersName($v);
+            }
         }
     }
-
 
     /**
      * @return array|mixed
