@@ -36,16 +36,20 @@ class DI
 
     public function get($object)
     {
-        var_dump($object);
-        new $object();
-//        $objectName = strtolower(trim($object));
-//        if(!isset($this->registry[$objectName])) {
-//            try {
-//                $this->registry[$objectName] = new $object();
-//            }catch (Exception $e) {
-//                echo "salut";
-//            }
-//        }
-//        return new $this->registry[$objectName];
+        $objectName = strtolower(trim($object));
+
+        if(count(explode('\\', $object)) === 1) {
+            $object = 'App\Service\\'.$object;
+            $objectName = strtolower(trim($object));
+        }
+
+        if(!isset($this->registry[$objectName])) {
+            try {
+                $this->registry[$objectName] = new $object();
+            }catch (Exception $e) {
+                die(sprintf('There is no class named %s, please make sure that the name and namespace are valid.', $object));
+            }
+        }
+        return new $this->registry[$objectName];
     }
 }
