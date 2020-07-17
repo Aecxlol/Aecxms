@@ -4,7 +4,7 @@ return [
         "host" => "localhost",
         "dbName" => "aecxms",
         "user" => "root",
-        "password" => ""
+        "password" => "password"
     ],
     "env" => "dev"
 ];

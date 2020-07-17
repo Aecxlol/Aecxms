@@ -8,6 +8,6 @@ class Router
 {
     public function __construct()
     {
-        DI::getInstance()->get('Config');
+        DI::getInstance()->get('App\Model\AbstractModel');
     }
 }

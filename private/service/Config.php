@@ -4,6 +4,8 @@
 namespace App\Service;
 
 
+use App\Exception\Exception;
+
 class Config
 {
     /**
@@ -31,9 +33,10 @@ class Config
      */
     private string $password;
 
-
     /**
      * Config constructor.
+     * Get the config file and hydrate the database setters
+     * @throws Exception
      */
     public function __construct()
     {
@@ -42,13 +45,18 @@ class Config
     }
 
     /**
+     * Get all the Db config from the config file and set every setters to the array fields values
      * @param array $config
+     * @throws Exception
      */
-    private function hydrateDb(array $config) {
+    private function hydrateDb(array $config)
+    {
         foreach ($config['database'] as $k => $v) {
-            $dbSettersName = 'set'.ucfirst($k);
-            if(method_exists($this, $dbSettersName)){
+            $dbSettersName = 'set' . ucfirst($k);
+            if (method_exists($this, $dbSettersName)) {
                 $this->$dbSettersName($v);
+            } else {
+                throw new Exception(sprintf('The method %s doesn\'t exist.', $dbSettersName));
             }
         }
     }

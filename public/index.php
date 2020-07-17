@@ -13,4 +13,4 @@ spl_autoload_register(function ($class) {
     require $fileName;
 });
 
-DI::getInstance()->get('Router');
+DI::getInstance()->get('App\Service\Router');

@@ -38,11 +38,6 @@ class DI
     {
         $objectName = strtolower(trim($object));
 
-        if(count(explode('\\', $object)) === 1) {
-            $object = 'App\Service\\'.$object;
-            $objectName = strtolower(trim($object));
-        }
-
         if(!isset($this->registry[$objectName])) {
             try {
                 $this->registry[$objectName] = new $object();
