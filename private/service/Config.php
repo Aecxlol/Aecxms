@@ -49,7 +49,7 @@ class Config
      * @param array $config
      * @throws Exception
      */
-    private function hydrateDb(array $config)
+    private function hydrateDb(array $config): void
     {
         foreach ($config['database'] as $k => $v) {
             $dbSettersName = 'set' . ucfirst($k);

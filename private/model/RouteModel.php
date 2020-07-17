@@ -2,6 +2,12 @@
 
 namespace App\Model;
 
-class RouteModel extends AbstractModel {
-
+class RouteModel extends AbstractModel
+{
+    public function getRoutes()
+    {
+        $routes = $this->select('*', 'routes');
+        $routes->execute();
+        $routes->fetch();
+    }
 }

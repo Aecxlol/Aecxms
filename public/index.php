@@ -2,6 +2,7 @@
 
 use App\Service\DI;
 
+
 spl_autoload_register(function ($class) {
     $privateFolderPath = str_replace('public', 'private', __DIR__);
     $className = strtolower(str_replace('App', '', $class)).'.php';

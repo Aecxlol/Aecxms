@@ -34,14 +34,19 @@ class DI
         return self::$instance;
     }
 
+    /**
+     * @param $object
+     * @return mixed
+     */
     public function get($object)
     {
         $objectName = strtolower(trim($object));
+        var_dump($objectName);
 
-        if(!isset($this->registry[$objectName])) {
+        if (!isset($this->registry[$objectName])) {
             try {
                 $this->registry[$objectName] = new $object();
-            }catch (Exception $e) {
+            } catch (Exception $e) {
                 die(sprintf('There is no class named %s, please make sure that the name and namespace are valid.', $object));
             }
         }
