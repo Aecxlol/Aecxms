@@ -41,7 +41,6 @@ class DI
     public function get($object)
     {
         $objectName = strtolower(trim($object));
-        var_dump($objectName);
 
         if (!isset($this->registry[$objectName])) {
             try {
@@ -50,6 +49,6 @@ class DI
                 die(sprintf('There is no class named %s, please make sure that the name and namespace are valid.', $object));
             }
         }
-        return new $this->registry[$objectName];
+        return $this->registry[$objectName];
     }
 }

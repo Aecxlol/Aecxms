@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Service\DI;
+use PDO;
 
 abstract class AbstractModel
 {
@@ -25,14 +26,14 @@ abstract class AbstractModel
      * @param string $dbName
      * @param string $user
      * @param string $password
-     * @return \PDO
+     * @return PDO
      */
     private function dbConnect(string $host, string $dbName, string $user, string $password): object
     {
         try {
-            return $this->db = new \PDO('mysql:host=' . $host . ';dbname=' . $dbName . ';charset=utf8', $user, $password);
+            return $this->db = new PDO('mysql:host=' . $host . ';dbname=' . $dbName . ';charset=utf8', $user, $password);
         } catch (\Exception $e) {
-            die(sprintf('Couldn\'t log in to the Database : %s', $e->getMessage()));
+            die(sprintf('Could not log in to the Database : %s', $e->getMessage()));
         }
     }
 
@@ -43,6 +44,8 @@ abstract class AbstractModel
      */
     protected function select(string $selection, string $table)
     {
-        return $this->db->prepare('SELECT ' . $selection . ' FROM ' . $table);
+        $req = $this->db->prepare('SELECT ' . $selection . ' FROM ' . $table);
+        $req->execute();
+        return $req->fetch();
     }
 }

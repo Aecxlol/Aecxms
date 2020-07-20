@@ -34,6 +34,11 @@ class Config
     private string $password;
 
     /**
+     * @var string
+     */
+    private string $env;
+
+    /**
      * Config constructor.
      * Get the config file and hydrate the database setters
      * @throws Exception
@@ -42,6 +47,7 @@ class Config
     {
         $this->setConfigFile(require('../private/config/config.php'));
         $this->hydrateDb($this->configFile);
+        $this->setEnv($this->configFile);
     }
 
     /**
@@ -139,5 +145,21 @@ class Config
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnv(): string
+    {
+        return $this->env;
+    }
+
+    /**
+     * @param array $env
+     */
+    public function setEnv(array $env): void
+    {
+        $this->env = $env['env'];
     }
 }

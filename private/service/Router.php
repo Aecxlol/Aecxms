@@ -10,5 +10,6 @@ class Router
     {
         $routes = DI::getInstance()->get('App\Model\RouteModel');
 //        var_dump($routes->getRoutes());
+
     }
 }

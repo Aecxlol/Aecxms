@@ -6,8 +6,6 @@ class RouteModel extends AbstractModel
 {
     public function getRoutes()
     {
-        $routes = $this->select('*', 'routes');
-        $routes->execute();
-        $routes->fetch();
+        return $this->select('*', 'routes');
     }
 }
