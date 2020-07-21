@@ -3,14 +3,15 @@
 namespace App\Model;
 
 use App\Service\DI;
+use Exception as ExceptionAlias;
 use PDO;
 
 abstract class AbstractModel
 {
     /**
-     * @var object|null
+     * @var PDO
      */
-    private ?object $db = null;
+    private ?PDO $db = null;
 
     /**
      * AbstractModel constructor.
@@ -28,11 +29,13 @@ abstract class AbstractModel
      * @param string $password
      * @return PDO
      */
-    private function dbConnect(string $host, string $dbName, string $user, string $password): object
+    private function dbConnect(string $host, string $dbName, string $user, string $password): PDO
     {
         try {
-            return $this->db = new PDO('mysql:host=' . $host . ';dbname=' . $dbName . ';charset=utf8', $user, $password);
-        } catch (\Exception $e) {
+            $this->db = new PDO('mysql:host=' . $host . ';dbname=' . $dbName . ';charset=utf8', $user, $password);
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $this->db;
+        } catch (ExceptionAlias $e) {
             die(sprintf('Could not log in to the Database : %s', $e->getMessage()));
         }
     }
@@ -40,12 +43,13 @@ abstract class AbstractModel
     /**
      * @param string $selection
      * @param string $table
-     * @return mixed
+     * @return array
      */
-    protected function select(string $selection, string $table)
+    protected function select(string $selection, string $table): array
     {
         $req = $this->db->prepare('SELECT ' . $selection . ' FROM ' . $table);
         $req->execute();
-        return $req->fetch();
+        $req->setFetchMode(PDO::FETCH_ASSOC);
+        return $req->fetchAll();
     }
 }

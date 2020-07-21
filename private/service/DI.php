@@ -40,6 +40,10 @@ class DI
      */
     public function get($object)
     {
+        /**
+         * @todo
+         * faire en sorte que l'appel d'une classe ne nécessite pas de call le namespace associé
+         */
         $objectName = strtolower(trim($object));
 
         if (!isset($this->registry[$objectName])) {
