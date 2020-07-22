@@ -63,9 +63,10 @@ abstract class AbstractModel
      */
     protected function select(string $selection, string $table, array $options = null): array
     {
-        $key   = null;
-        $value = null;
-        $sql   = 'SELECT ' . $selection . ' FROM ' . $table;
+        $key_first                = null;
+        $key_last                 = null;
+        $whereClauseKeysAndValues = [];
+        $sql                      = 'SELECT ' . $selection . ' FROM ' . $table;
 
         /**
          * @todo
@@ -77,33 +78,43 @@ abstract class AbstractModel
         if ($options) {
             // If the WHERE array exists
             if (array_key_exists('WHERE', $options)) {
+                $key_first = array_key_first($options['WHERE']);
+                array_push($whereClauseKeysAndValues, $key_first, $options['WHERE'][$key_first]);
+
                 // If the WHERE array has only one field
                 if (count($options['WHERE']) === self::ONE_WHERE_CONDITION) {
-                    // field's key
-                    $key = array_key_first($options['WHERE']);
-                    // key's value
-                    $value = $options['WHERE'][array_key_first($options['WHERE'])];
+                    $sql = 'SELECT ' . $selection . ' FROM ' . $table . ' WHERE ' . $key_first . '=:' . $key_first;
 
-                    $sql = 'SELECT ' . $selection . ' FROM ' . $table . ' WHERE ' . $key . '=:' . $key;
                     // If the WHERE array has two fields
                 } elseif (count($options['WHERE']) === self::TWO_WHERE_CONDITION) {
-                    var_dump("2 cond");
-                    $sql = 'SELECT ' . $selection . ' FROM ' . $table . ' WHERE ' . implode("", array_keys($options['WHERE'])) . '=:' . implode("", array_keys($options['WHERE']));
+                    $key_last = array_key_last($options['WHERE']);
+                    array_push($whereClauseKeysAndValues, $key_last, $options['WHERE'][$key_last]);
+                    $sql = 'SELECT ' . $selection . ' FROM ' . $table . ' WHERE ' . $key_first . '=:' . $key_first . ' AND ' . $key_last . '=:' . $key_last;
+
                     // Cannot have more than two fields
                 } else {
-                    die('You cannot have more than two parameters in the WHERE condition.');
+                    die('You cannot have empty or more than two parameters in the WHERE clause.');
                 }
             }
         }
         $req = $this->db->prepare($sql);
+
         if ($options) {
-            $req->bindParam($key, $value, PDO::PARAM_STR);
+            if (array_key_exists('WHERE', $options)) {
+                for ($i = 0; $i < count($options['WHERE']); $i++) {
+                    // $i*2 is all the odd values and ($i*2)+1 is all the even values
+                    // so the first loop will get the value of the the key 0 and 1
+                    // the second one will get the key 2 and 3 etc
+                    $req->bindParam($whereClauseKeysAndValues[$i * 2], $whereClauseKeysAndValues[($i * 2) + 1], PDO::PARAM_STR);
+                }
+            }
         }
+
         $req->execute();
         $req->setFetchMode(PDO::FETCH_ASSOC);
 
         if ($req->rowCount() === self::NO_RESULTS_FOUND) {
-            die('No results found for the SELECT request. Something might be wrong in your SQL statement.');
+            die('SELECT ERROR : No results found. Something might be wrong in the options you gave to the SELECT request.');
         } else {
             return $req->fetchAll();
         }
