@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Exception;
+namespace Aecxms\Exception;
 
 
 class Exception extends \Exception

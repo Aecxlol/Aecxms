@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Service;
+namespace Aecxms\Service;
 
 
-use App\Exception\Exception;
+use Aecxms\Exception\Exception;
 
 class Config
 {
@@ -62,7 +62,7 @@ class Config
             if (method_exists($this, $dbSettersName)) {
                 $this->$dbSettersName($v);
             } else {
-                throw new Exception(sprintf('The method %s doesn\'t exist.', $dbSettersName));
+                throw new Exception(sprintf('The method %s does not exist.', $dbSettersName));
             }
         }
     }
@@ -157,6 +157,7 @@ class Config
 
     /**
      * @param array $env
+     * Get env through the config's file with the key env
      */
     public function setEnv(array $env): void
     {

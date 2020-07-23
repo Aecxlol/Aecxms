@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Model;
+namespace Aecxms\Model;
 
-use App\Service\DI;
+use Aecxms\Service\DI;
 use Exception as ExceptionAlias;
 use PDO;
 
 abstract class AbstractModel
 {
     /**
-     * @var PDO
+     * @var PDO|null
      */
     private ?PDO $db = null;
 
@@ -33,7 +33,7 @@ abstract class AbstractModel
      */
     public function __construct()
     {
-        $dbCfg = DI::getInstance()->get('App\Service\Config');
+        $dbCfg = DI::getInstance()->get('Aecxms\Service\Config');
         $this->dbConnect($dbCfg->getHost(), $dbCfg->getDbName(), $dbCfg->getUser(), $dbCfg->getPassword());
     }
 

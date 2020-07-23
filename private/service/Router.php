@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Service;
+namespace Aecxms\Service;
 
 class Router
 {
     public function __construct()
     {
-        $routes = DI::getInstance()->get('App\Model\RouteModel');
-        var_dump($routes->getRoutes());
+        $routes = DI::getInstance()->get('Aecxms\Model\RouteModel');
+        var_dump($_SERVER);
 //        $routes->getRoutes();
     }
 }

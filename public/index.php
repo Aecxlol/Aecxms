@@ -1,11 +1,11 @@
 <?php
 
-use App\Service\DI;
+use Aecxms\Service\DI;
 
 
 spl_autoload_register(function ($class) {
     $privateFolderPath = str_replace('public', 'private', __DIR__);
-    $className = strtolower(str_replace('App', '', $class)).'.php';
+    $className = strtolower(str_replace('Aecxms', '', $class)).'.php';
     /**
      * @todo
      * faire regex pour ucfirst le nom de la classe
@@ -17,4 +17,4 @@ spl_autoload_register(function ($class) {
     require $fileName;
 });
 
-DI::getInstance()->get('App\Service\Router');
+DI::getInstance()->get('Aecxms\Service\Router');

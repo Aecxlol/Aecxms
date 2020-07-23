@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace Aecxms\Model;
 
 class RouteModel extends AbstractModel
 {
@@ -9,10 +9,6 @@ class RouteModel extends AbstractModel
      */
     public function getRoutes(): array
     {
-        return $this->select('*', 'routes', [
-            'WHERE' => [
-                'name' => 'testb',
-            ]
-        ]);
+        return $this->select('*', 'routes');
     }
 }

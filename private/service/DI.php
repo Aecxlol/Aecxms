@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Service;
+namespace Aecxms\Service;
 
-use App\Exception\Exception;
+use Aecxms\Exception\Exception;
 
 class DI
 {
