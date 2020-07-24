@@ -3,6 +3,7 @@
 namespace Aecxms\Service;
 
 use Aecxms\Exception\Exception;
+use Aecxms\Model\RouteModel;
 
 class DI
 {
