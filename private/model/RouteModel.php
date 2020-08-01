@@ -11,4 +11,12 @@ class RouteModel extends AbstractModel
     {
         return $this->select('*', 'routes');
     }
+
+    /**
+     * @return array
+     */
+    public function addRoute(): array
+    {
+        
+    }
 }

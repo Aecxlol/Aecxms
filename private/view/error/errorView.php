@@ -1,0 +1,1 @@
+<h1><?= $errorMessage ?? 'Une erreur s\'est produite' ?></h1>

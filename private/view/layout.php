@@ -8,6 +8,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>HOMEPAGE</h1>
+    <?= $content ?? 'Pas de contenu' ?>
 </body>
 </html>
