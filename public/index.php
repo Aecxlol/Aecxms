@@ -17,4 +17,4 @@ spl_autoload_register(function ($class) {
     require $fileName;
 });
 
-DI::getInstance()->get('Aecxms\Service\Router');
+DI::getInstance()->get('Aecxms\Service\Dispatcher');

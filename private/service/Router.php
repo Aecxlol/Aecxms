@@ -6,86 +6,94 @@ use Aecxms\Model\RouteModel;
 
 class Router
 {
+    private const PATH = 'path';
+
+    private const CONTROLLER = 2;
+
+    private const ACTION = 3;
+
+    private const PARAMS = 4;
+
     /**
      * @var string
      */
-    private string $currentUrl;
+    private string $controller;
 
     /**
-     * @var array
+     * @var string
      */
-    private array $existingRoutes;
+    private string $action;
 
-    private const CONTROLLER_NAMESPACE = 'Aecxms\\Controller\\';
+    /**
+     * @var int
+     */
+    private int $params;
 
+    /**
+     * Router constructor.
+     */
     public function __construct()
     {
-        $routes = DI::getInstance()->get('Aecxms\Model\RouteModel');
-        $this->buildCurrentUrl();
-        $this->setExistingRoutes($routes->getRoutes());
-        $this->getRoutes();
     }
 
     /**
-     *
+     * @param Request $url
      */
-    public function getRoutes()
+    public function parseUrl(Request $url)
     {
-        foreach ($this->existingRoutes as $route) {
-            if($this->currentUrl === $route['url']) {
-                $controller = self::CONTROLLER_NAMESPACE . $route['controller_name'];
-                $controller = new $controller();
-                $action = $route['controller_action'];
-                $controller->$action();
-                break;
-            }
-        }
-    }
+        $uri = parse_url($url->getUrl());
+        $uri = explode('/', $uri[self::PATH]);
 
-    /**
-     * Build the complete current URL to a string
-     */
-    private function buildCurrentUrl(): void
-    {
-        $url = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-        $this->setCurrentUrl($url);
-    }
-
-    public function redirectTo404 ()
-    {
-        var_dump("404 page not found");
+        $this->controller = isset($uri[self::CONTROLLER]) ? $uri[self::CONTROLLER] : false;
+        $this->action = isset($uri[self::ACTION]) ? $uri[self::ACTION] : false;
+        $this->params = isset($uri[self::PARAMS]) ? $uri[self::PARAMS] : false;
     }
 
     /**
      * @return string
      */
-    public function getCurrentUrl(): string
+    public function getController(): string
     {
-        return $this->currentUrl;
+        return $this->controller;
     }
 
     /**
-     * @param string $currentUrl
+     * @param string $controller
      */
-    public function setCurrentUrl(string $currentUrl): void
+    public function setController(string $controller): void
     {
-        $this->currentUrl = $currentUrl;
+        $this->controller = $controller;
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getExistingRoutes(): array
+    public function getAction(): string
     {
-        return $this->existingRoutes;
+        return $this->action;
     }
 
     /**
-     * @param array $existingRoutes
+     * @param string $action
      */
-    public function setExistingRoutes(array $existingRoutes): void
+    public function setAction(string $action): void
     {
-        $this->existingRoutes = $existingRoutes;
+        $this->action = $action;
     }
 
+    /**
+     * @return int
+     */
+    public function getParams(): int
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param int $params
+     */
+    public function setParams(int $params): void
+    {
+        $this->params = $params;
+    }
 }

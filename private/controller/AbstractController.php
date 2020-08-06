@@ -58,7 +58,6 @@ abstract class AbstractController
         } catch (CmsException $e) {
             $errorMessage  = $e->getMessage();
             $errorTemplate = $this->viewDirectory . 'error' . DIRECTORY_SEPARATOR . 'errorView.php';
-            $errorViewFile = 'errorView.php';
             require($errorTemplate);
         }
     }
