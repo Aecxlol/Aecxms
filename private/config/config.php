@@ -6,5 +6,5 @@ return [
         "user" => "root",
         "password" => "password"
     ],
-    "env" => "dev"
+    "env" => "prod"
 ];

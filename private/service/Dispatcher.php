@@ -4,6 +4,7 @@
 namespace Aecxms\Service;
 
 
+use Aecxms\Controller\AbstractController;
 use Aecxms\Exception\CmsException;
 use Aecxms\Model\RouteModel;
 
@@ -12,6 +13,10 @@ class Dispatcher
     private const CONTROLLER_NAME = 'controller_name';
 
     private const CONTROLLER_ACTION = 'controller_action';
+
+    private const DEV_ENV = "dev";
+
+    private const PROD_ENV = "prod";
 
     /**
      * @var Request|mixed
@@ -26,7 +31,7 @@ class Dispatcher
     /**
      * @var RouteModel|mixed
      */
-    private RouteModel $routes;
+    private RouteModel $routeModel;
 
     /**
      * @var array
@@ -39,15 +44,26 @@ class Dispatcher
     private ?object $controller = null;
 
     /**
+     * @var Config
+     */
+    private Config $config;
+
+    /**
+     * @var string
+     */
+    private string $env;
+
+    /**
      * Dispatcher constructor.
      * @throws CmsException
      */
     public function __construct()
     {
-        $this->request  = DI::getInstance()->get('Aecxms\Service\Request');
-        $this->router   = DI::getInstance()->get('Aecxms\Service\Router');
-        $this->routes   = DI::getInstance()->get('Aecxms\Model\RouteModel');
-        $this->dbRoutes = $this->routes->getRoutes();
+        $this->request    = DI::getInstance()->get('Aecxms\Service\Request');
+        $this->router     = DI::getInstance()->get('Aecxms\Service\Router');
+        $this->routeModel = DI::getInstance()->get('Aecxms\Model\RouteModel');
+        $this->dbRoutes   = $this->routeModel->getRoutes();
+        $this->env        = Config::getEnv();
 
         $this->router->parseUrl($this->request);
         $this->loadController();
@@ -92,7 +108,7 @@ class Dispatcher
     private function doesActionExist()
     {
         if ($this->doesControllerExist()) {
-            if(!method_exists($this->controller, $this->router->getAction())) {
+            if (!method_exists($this->controller, $this->router->getAction())) {
                 return false;
             }
         }
@@ -101,7 +117,7 @@ class Dispatcher
 
     /**
      * @throws CmsException
-     * Load the controller 'called' in the url if it matched with one's in the DB
+     * Load the controller 'called' in the url only if it matches with one's in the DB
      */
     private function loadController()
     {
@@ -109,21 +125,41 @@ class Dispatcher
             foreach ($this->dbRoutes as $route) {
                 $controller = ucfirst($this->router->getController()) . 'Controller';
                 // Verify if the controller provided in the url exists in the DB
-                if($route[self::CONTROLLER_NAME] === $controller) {
+                if ($route[self::CONTROLLER_NAME] === $controller) {
                     // Verify if the action provided in the url exists in the DB
-                    if($route[self::CONTROLLER_ACTION] === $this->router->getAction()) {
+                    if ($route[self::CONTROLLER_ACTION] === $this->router->getAction()) {
                         $action = $this->router->getAction();
                         $this->controller->$action();
                     } else {
-                        throw new CmsException(sprintf('The action %s does not exist in the database.', $this->router->getAction()));
+                        if ($this->env === self::DEV_ENV) {
+                            throw new CmsException(sprintf('The action %s does not exist in the database.', $this->router->getAction()));
+                        } else {
+                            $this->redirect404();
+                        }
                     }
-                }else {
-                    throw new CmsException(sprintf('The controller %s does not exist in the database.', $controller));
+                } else {
+                    if ($this->env === self::DEV_ENV) {
+                        throw new CmsException(sprintf('The controller %s does not exist in the database.', $controller));
+                    } else {
+                        $this->redirect404();
+                    }
                 }
                 break;
             }
         } else {
-            throw new CmsException(sprintf('Error : something went wrong for multiple possible reasons. Please check the url\'s format, the controller or the action provided in the url.'));
+            if ($this->env === self::DEV_ENV) {
+                throw new CmsException(sprintf('Error : something went wrong for multiple possible reasons. Please check the url\'s format, the controller or the action provided in the url.'));
+            } else {
+                $this->redirect404();
+            }
         }
+    }
+
+    public function redirect404()
+    {
+        header('HTTP/1.0 404 Not Found');
+        $controller = DI::getInstance()->get('Aecxms\Controller\HomeController');
+        $controller->render('error/404.php');
+        exit();
     }
 }

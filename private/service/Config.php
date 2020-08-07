@@ -36,7 +36,7 @@ class Config
     /**
      * @var string
      */
-    private string $env;
+    private static string $env;
 
     /**
      * Config constructor.
@@ -150,9 +150,9 @@ class Config
     /**
      * @return string
      */
-    public function getEnv(): string
+    public static function getEnv(): string
     {
-        return $this->env;
+        return self::$env;
     }
 
     /**
@@ -161,6 +161,6 @@ class Config
      */
     public function setEnv(array $env): void
     {
-        $this->env = $env['env'];
+        self::$env = $env['env'];
     }
 }
