@@ -5,6 +5,8 @@ namespace Aecxms\Controller;
 
 
 use Aecxms\Exception\CmsException;
+use Aecxms\Service\Config;
+use Aecxms\Service\Dispatcher;
 
 abstract class AbstractController
 {
@@ -16,11 +18,17 @@ abstract class AbstractController
     private string $viewDirectory;
 
     /**
+     * @var string
+     */
+    private string $env;
+
+    /**
      * AbstractController constructor.
      */
     public function __construct()
     {
         $this->setViewDirectory(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR);
+        $this->env = Config::getEnv();
     }
 
     /**
@@ -40,10 +48,10 @@ abstract class AbstractController
             if (file_exists($layout)) {
                 require($this->viewDirectory . self::LAYOUT);
             } else {
-                throw new CmsException(sprintf('The file %s does not exist in %s', self::LAYOUT, $layout));
+                Dispatcher::errorOutput($this->env, sprintf('The file %s does not exist in %s', self::LAYOUT, $layout));
             }
         } else {
-            throw new CmsException(sprintf('The file %s does not exist in %s', $view, $file));
+            Dispatcher::errorOutput($this->env, sprintf('The file %s does not exist in %s', $view, $file));
         }
     }
 

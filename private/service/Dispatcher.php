@@ -3,8 +3,6 @@
 
 namespace Aecxms\Service;
 
-
-use Aecxms\Controller\AbstractController;
 use Aecxms\Exception\CmsException;
 use Aecxms\Model\RouteModel;
 
@@ -13,10 +11,6 @@ class Dispatcher
     private const CONTROLLER_NAME = 'controller_name';
 
     private const CONTROLLER_ACTION = 'controller_action';
-
-    private const DEV_ENV = "dev";
-
-    private const PROD_ENV = "prod";
 
     /**
      * @var Request|mixed
@@ -126,38 +120,45 @@ class Dispatcher
                         $action = $this->router->getAction();
                         $this->controller->$action();
                     } else {
-                        if ($this->env === self::DEV_ENV) {
-                            throw new CmsException(sprintf('The action %s does not exist in the database.', $this->router->getAction()));
-                        } else {
-                            $this->redirect404();
-                        }
+                        $this->errorOutput($this->env, sprintf('The action %s does not exist in the database.', $this->router->getAction()));
                     }
                 } else {
-                    if ($this->env === self::DEV_ENV) {
-                        throw new CmsException(sprintf('The controller %s does not exist in the database.', $controller));
-                    } else {
-                        $this->redirect404();
-                    }
+                    $this->errorOutput($this->env, sprintf('The controller %s does not exist in the database.', $controller));
                 }
                 break;
             }
         } else {
-            if ($this->env === self::DEV_ENV) {
-                throw new CmsException(sprintf('Error : something went wrong for multiple possible reasons. Please check the url\'s format, the controller or the action provided in the url.'));
-            } else {
-                $this->redirect404();
-            }
+            $this->errorOutput($this->env, sprintf('Error : something went wrong for multiple possible reasons. Please check the url\'s format, the controller or the action provided in the url.'));
         }
     }
 
     /**
      * Redirect to 404 if the env is in prod
      */
-    public function redirect404()
+    public static function redirect404()
     {
         header('HTTP/1.0 404 Not Found');
         $controller = DI::getInstance()->get('Aecxms\Controller\HomeController');
         $controller->render('error/404.php');
         exit();
+    }
+
+    /**
+     * @param $env
+     * @param $message
+     * @throws CmsException
+     * Manages the error messages according to the environment
+     */
+    public static function errorOutput($env, $message)
+    {
+        switch ($env) {
+            case DEV_ENV:
+                throw new CmsException($message);
+                break;
+
+            case PROD_ENV:
+                self::redirect404();
+                break;
+        }
     }
 }

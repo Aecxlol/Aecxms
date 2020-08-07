@@ -4,7 +4,7 @@
 namespace Aecxms\Service;
 
 
-use Aecxms\Exception\Exception;
+use Aecxms\Exception\CmsException;
 
 class Config
 {
@@ -41,7 +41,7 @@ class Config
     /**
      * Config constructor.
      * Get the config file and hydrate the database setters
-     * @throws Exception
+     * @throws CmsException
      */
     public function __construct()
     {
@@ -53,7 +53,7 @@ class Config
     /**
      * Get all the Db config from the config file and set every setters to the array fields values
      * @param array $config
-     * @throws Exception
+     * @throws CmsException
      */
     private function hydrateDb(array $config): void
     {
@@ -62,7 +62,7 @@ class Config
             if (method_exists($this, $dbSettersName)) {
                 $this->$dbSettersName($v);
             } else {
-                throw new Exception(sprintf('The method %s does not exist.', $dbSettersName));
+                Dispatcher::errorOutput(self::$env, sprintf('The method %s does not exist.', $dbSettersName));
             }
         }
     }
