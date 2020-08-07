@@ -2,19 +2,10 @@
 
 use Aecxms\Service\DI;
 
+define('PRIVATE_DIR_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR);
 
-spl_autoload_register(function ($class) {
-    $privateFolderPath = str_replace('public', 'private', __DIR__);
-    $className = strtolower(str_replace('Aecxms', '', $class)).'.php';
-    /**
-     * @todo
-     * faire regex pour ucfirst le nom de la classe
-     */
-    $fileName = $privateFolderPath.$className;
-    if(!file_exists($fileName)){
-        throw new Exception(sprintf('Class %s not found', $class));
-    }
-    require $fileName;
-});
+require PRIVATE_DIR_PATH . 'vendor/Autoloader.php';
+
+Autoloader::register();
 
 DI::getInstance()->get('Aecxms\Service\Dispatcher');

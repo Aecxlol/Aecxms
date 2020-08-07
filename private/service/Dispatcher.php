@@ -44,11 +44,6 @@ class Dispatcher
     private ?object $controller = null;
 
     /**
-     * @var Config
-     */
-    private Config $config;
-
-    /**
      * @var string
      */
     private string $env;
@@ -155,6 +150,9 @@ class Dispatcher
         }
     }
 
+    /**
+     * Redirect to 404 if the env is in prod
+     */
     public function redirect404()
     {
         header('HTTP/1.0 404 Not Found');
