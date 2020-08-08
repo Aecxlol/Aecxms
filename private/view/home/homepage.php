@@ -1,1 +1,3 @@
-<h1>TITLE</h1>
+<h1>Accueil</h1>
+
+<img src="../public/img/the_barrens.jpg" alt="" width="1820" height="1080">

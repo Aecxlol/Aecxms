@@ -59,8 +59,8 @@ class Dispatcher
     }
 
     /**
-     * @return bool
      * Verify if the url is in the right format (domain/controller/action/params)
+     * @return bool
      */
     private function isUrlFormatValid()
     {
@@ -71,10 +71,10 @@ class Dispatcher
     }
 
     /**
-     * @return bool
      * Verify if the controller's name specified in the url exists
      * if so, get an instance of this controller.
      * Files wise
+     * @return bool
      */
     private function doesControllerExist()
     {
@@ -89,10 +89,9 @@ class Dispatcher
         }
     }
 
-
     /**
-     * @return bool
      * Verify if the action provided in the url exists in the controller provided
+     * @return bool
      */
     private function doesActionExist()
     {
@@ -105,8 +104,8 @@ class Dispatcher
     }
 
     /**
-     * @throws CmsException
      * Load the controller 'called' in the url only if it matches with one's in the DB
+     * @throws CmsException
      */
     private function loadController()
     {
@@ -133,7 +132,7 @@ class Dispatcher
     }
 
     /**
-     * Redirect to 404 if the env is in prod
+     * Redirect to 404
      */
     public static function redirect404()
     {
@@ -144,10 +143,10 @@ class Dispatcher
     }
 
     /**
+     * Manages the error messages according to the environment
      * @param $env
      * @param $message
      * @throws CmsException
-     * Manages the error messages according to the environment
      */
     public static function errorOutput($env, $message)
     {
