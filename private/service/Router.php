@@ -2,7 +2,7 @@
 
 namespace Aecxms\Service;
 
-use Aecxms\Model\RouteModel;
+use Aecxms\Http\Request;
 
 class Router
 {
@@ -37,16 +37,16 @@ class Router
     }
 
     /**
-     * @param Request $url
+     * @param Request $request
      */
-    public function parseUrl(Request $url)
+    public function parseUrl(Request $request)
     {
-        $uri = parse_url($url->getUrl());
+        $uri = parse_url($request->getPathInfo());
         $uri = explode('/', $uri[self::PATH]);
 
-        $this->controller = isset($uri[self::CONTROLLER]) ? $uri[self::CONTROLLER] : false;
-        $this->action = isset($uri[self::ACTION]) ? $uri[self::ACTION] : false;
-        $this->params = isset($uri[self::PARAMS]) ? $uri[self::PARAMS] : false;
+        $this->controller = $uri[self::CONTROLLER] ?? false;
+        $this->action     = $uri[self::ACTION] ?? false;
+        $this->params     = $uri[self::PARAMS] ?? false;
     }
 
     /**

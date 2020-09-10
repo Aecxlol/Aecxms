@@ -4,6 +4,7 @@
 namespace Aecxms\Service;
 
 use Aecxms\Exception\CmsException;
+use Aecxms\Http\Request;
 use Aecxms\Model\RouteModel;
 
 class Dispatcher
@@ -48,7 +49,7 @@ class Dispatcher
      */
     public function __construct()
     {
-        $this->request    = DI::getInstance()->get('Aecxms\Service\Request');
+        $this->request    = DI::getInstance()->get('Aecxms\Http\Request');
         $this->router     = DI::getInstance()->get('Aecxms\Service\Router');
         $this->routeModel = DI::getInstance()->get('Aecxms\Model\RouteModel');
         $this->dbRoutes   = $this->routeModel->getRoutes();
@@ -136,7 +137,7 @@ class Dispatcher
      */
     public static function redirect404()
     {
-        header('HTTP/1.0 404 Not Found');
+        header('HTTP/1.1 404 Not Found');
         $controller = DI::getInstance()->get('Aecxms\Controller\HomeController');
         $controller->render('error/404.php');
         exit();

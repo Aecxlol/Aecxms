@@ -4,7 +4,7 @@
 namespace Aecxms\Middleware;
 
 
-class Middleware
+class AbstractMiddleware
 {
 
 }

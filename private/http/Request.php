@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Aecxms\Service;
+namespace Aecxms\Http;
 
 
 class Request
@@ -9,7 +9,7 @@ class Request
     /**
      * @var string
      */
-    private string $url;
+    private string $pathInfo;
 
     /**
      * @var string
@@ -21,24 +21,25 @@ class Request
      */
     public function __construct()
     {
-        $this->url = $_SERVER['REQUEST_URI'];
+        $this->pathInfo = $_SERVER['REQUEST_URI'];
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
+        var_dump(basename(__FILE__));
     }
 
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getPathInfo(): string
     {
-        return $this->url;
+        return $this->pathInfo;
     }
 
     /**
-     * @param string $url
+     * @param string $pathInfo
      */
-    private function setUrl(string $url): void
+    private function setUrl(string $pathInfo): void
     {
-        $this->url = $url;
+        $this->pathInfo = $pathInfo;
     }
 
     /**

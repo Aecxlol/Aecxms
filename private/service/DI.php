@@ -2,8 +2,12 @@
 
 namespace Aecxms\Service;
 
-use Aecxms\Exception\Exception;
+use Aecxms\Exception\CmsException;
 
+/**
+ * Class DI
+ * @package Aecxms\Service
+ */
 class DI
 {
     /**
@@ -49,7 +53,7 @@ class DI
         if (!isset($this->registry[$objectName])) {
             try {
                 $this->registry[$objectName] = new $object();
-            } catch (Exception $e) {
+            } catch (CmsException $e) {
                 die(sprintf('There is no class named %s, please make sure that the name and namespace are valid.', $object));
             }
         }
