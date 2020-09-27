@@ -54,7 +54,7 @@ class DI
             try {
                 $this->registry[$objectName] = new $object();
             } catch (CmsException $e) {
-                die(sprintf('There is no class named %s, please make sure that the name and namespace are valid.', $object));
+                die(sprintf('There is no class named %s, please make sure that the name and namespace are valid. You can also check if you declared the DI with the correct namespace.', $object));
             }
         }
         return $this->registry[$objectName];

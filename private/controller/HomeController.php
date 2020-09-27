@@ -9,7 +9,13 @@ namespace Aecxms\Controller;
  */
 class HomeController extends AbstractController
 {
-    public function index() {
-        $this->render('home/homepage.php');
+    public function index()
+    {
+        $test = "Salut à tous";
+
+        $this->render('home/homepage.php', [
+            'title' => 'Accueil',
+            'test' => $test
+        ]);
     }
 }

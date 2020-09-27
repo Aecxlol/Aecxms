@@ -4,6 +4,10 @@
 namespace Aecxms\Http;
 
 
+/**
+ * Class Request
+ * @package Aecxms\Http
+ */
 class Request
 {
     /**
@@ -23,7 +27,6 @@ class Request
     {
         $this->pathInfo = $_SERVER['REQUEST_URI'];
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
-        var_dump(basename(__FILE__));
     }
 
     /**

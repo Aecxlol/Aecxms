@@ -5,9 +5,15 @@ namespace Aecxms\Controller;
 
 
 use Aecxms\Exception\CmsException;
+use Aecxms\Http\Response;
 use Aecxms\Service\Config;
-use Aecxms\Service\Dispatcher;
+use Aecxms\Service\DI;
 
+
+/**
+ * Class AbstractController
+ * @package Aecxms\Controller
+ */
 abstract class AbstractController
 {
     private const LAYOUT = 'layout.php';
@@ -16,6 +22,11 @@ abstract class AbstractController
      * @var string
      */
     private string $viewDirectory;
+
+    /**
+     * @var Response
+     */
+    private Response $response;
 
     /**
      * @var string
@@ -28,7 +39,8 @@ abstract class AbstractController
     public function __construct()
     {
         $this->setViewDirectory(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR);
-        $this->env = Config::getEnv();
+        $this->response = DI::getInstance()->get('Aecxms\Http\Response');
+        $this->env      = Config::getEnv();
     }
 
     /**
@@ -42,16 +54,22 @@ abstract class AbstractController
         $layout = $this->viewDirectory . self::LAYOUT;
 
         if (file_exists($file)) {
+            /**
+             * TODO voir pour avoir les params dispo dans le template fils
+             */
             ob_start();
-            $content = require($this->viewDirectory . $view);
+            require($file);
+            if(!empty($params)) {
+                extract($params);
+            }
             $content = ob_get_clean();
             if (file_exists($layout)) {
-                require($this->viewDirectory . self::LAYOUT);
+                require($layout);
             } else {
-                Dispatcher::errorOutput($this->env, sprintf('The file %s does not exist in %s', self::LAYOUT, $layout));
+                $this->response->errorOutput($this->env, sprintf('The file %s does not exist in %s', self::LAYOUT, $layout));
             }
         } else {
-            Dispatcher::errorOutput($this->env, sprintf('The file %s does not exist in %s', $view, $file));
+            $this->response->errorOutput($this->env, sprintf('The file %s does not exist in %s', $view, $file));
         }
     }
 
