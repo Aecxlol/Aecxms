@@ -33,7 +33,7 @@ abstract class AbstractModel
      */
     public function __construct()
     {
-        $dbCfg = DI::getInstance()->get('Aecxms\Service\Config');
+        $dbCfg = DI::getInstance()->get('Config');
         $this->dbConnect($dbCfg->getHost(), $dbCfg->getDbName(), $dbCfg->getUser(), $dbCfg->getPassword());
     }
 

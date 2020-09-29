@@ -10,4 +10,4 @@ require PRIVATE_DIR_PATH . 'vendor/Autoloader.php';
 
 Autoloader::register();
 
-DI::getInstance()->get('Aecxms\Service\Dispatcher');
+DI::getInstance()->get('Dispatcher');

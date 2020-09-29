@@ -59,10 +59,10 @@ class Dispatcher
      */
     public function __construct()
     {
-        $this->request    = DI::getInstance()->get('Aecxms\Http\Request');
-        $this->response   = DI::getInstance()->get('Aecxms\Http\Response');
-        $this->router     = DI::getInstance()->get('Aecxms\Service\Router');
-        $this->routeModel = DI::getInstance()->get('Aecxms\Model\RouteModel');
+        $this->request    = DI::getInstance()->get('Request');
+        $this->response   = DI::getInstance()->get('Response');
+        $this->router     = DI::getInstance()->get('Router');
+        $this->routeModel = DI::getInstance()->get('RouteModel');
         $this->dbRoutes   = $this->routeModel->getRoutes();
         $this->env        = Config::getEnv();
 
@@ -140,7 +140,6 @@ class Dispatcher
         if (!file_exists($controllerDir . DIRECTORY_SEPARATOR . $controller . '.php')) {
             return false;
         } else {
-            $controller       = 'Aecxms\\Controller\\' . $controller;
             $this->controller = DI::getInstance()->get($controller);
             return true;
         }

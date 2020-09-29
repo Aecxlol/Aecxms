@@ -39,7 +39,7 @@ abstract class AbstractController
     public function __construct()
     {
         $this->setViewDirectory(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR);
-        $this->response = DI::getInstance()->get('Aecxms\Http\Response');
+        $this->response = DI::getInstance()->get('Response');
         $this->env      = Config::getEnv();
     }
 
