@@ -54,14 +54,11 @@ abstract class AbstractController
         $layout = $this->viewDirectory . self::LAYOUT;
 
         if (file_exists($file)) {
-            /**
-             * TODO voir pour avoir les params dispo dans le template fils
-             */
-            ob_start();
-            require($file);
             if(!empty($params)) {
                 extract($params);
             }
+            ob_start();
+            require($file);
             $content = ob_get_clean();
             if (file_exists($layout)) {
                 require($layout);

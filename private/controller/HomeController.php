@@ -16,7 +16,8 @@ class HomeController extends AbstractController
 
         $this->render('home/homepage.php', [
             'title' => 'Accueil',
-            'test' => $test
+            'test' => $test,
+            'mdr' => 'on test juste on verra'
         ]);
     }
 }
