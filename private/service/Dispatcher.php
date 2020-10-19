@@ -49,11 +49,6 @@ class Dispatcher
     private ?object $controller = null;
 
     /**
-     * @var string
-     */
-    private string $env;
-
-    /**
      * Dispatcher constructor.
      * @throws CmsException
      */
@@ -64,7 +59,6 @@ class Dispatcher
         $this->router     = DI::getInstance()->get('Router');
         $this->routeModel = DI::getInstance()->get('RouteModel');
         $this->dbRoutes   = $this->routeModel->getRoutes();
-        $this->env        = Config::getEnv();
 
         $this->router->parseUrl($this->request);
         $this->loadController();
@@ -86,15 +80,15 @@ class Dispatcher
                         $action = $this->router->getAction();
                         $this->controller->$action();
                     } else {
-                        $this->response->errorOutput($this->env, sprintf('The action %s does not exist in the database.', $this->router->getAction()));
+                        $this->response->errorOutput(sprintf('The action %s does not exist in the database.', $this->router->getAction()));
                     }
                 } else {
-                    $this->response->errorOutput($this->env, sprintf('The controller %s does not exist in the database.', $controller));
+                    $this->response->errorOutput(sprintf('The controller %s does not exist in the database.', $controller));
                 }
                 break;
             }
         } else {
-            $this->response->errorOutput($this->env, sprintf('Error : something went wrong for multiple possible reasons. Please check the url\'s format, the controller or the action provided in the url.'));
+            $this->response->errorOutput(sprintf('Error : something went wrong for multiple possible reasons. Please check the url\'s format, the controller or the action provided in the url.'));
         }
     }
 

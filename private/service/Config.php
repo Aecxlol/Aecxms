@@ -5,6 +5,7 @@ namespace Aecxms\Service;
 
 
 use Aecxms\Exception\CmsException;
+use Aecxms\Http\Response;
 
 class Config
 {
@@ -12,6 +13,11 @@ class Config
      * @var array
      */
     private array $configFile = [];
+
+    /**
+     * @var Response|mixed
+     */
+    private Response $response;
 
     /**
      * @var string
@@ -46,8 +52,9 @@ class Config
     public function __construct()
     {
         $this->setConfigFile(require('../private/config/config.php'));
-        $this->hydrateDb($this->configFile);
         $this->setEnv($this->configFile);
+        $this->response = DI::getInstance()->get('Response');
+        $this->hydrateDb($this->configFile);
     }
 
     /**
@@ -62,7 +69,7 @@ class Config
             if (method_exists($this, $dbSettersName)) {
                 $this->$dbSettersName($v);
             } else {
-                Dispatcher::errorOutput(self::$env, sprintf('The method %s does not exist.', $dbSettersName));
+                $this->response->errorOutput(sprintf('The method %s does not exist.', $dbSettersName));
             }
         }
     }
@@ -156,11 +163,11 @@ class Config
     }
 
     /**
-     * @param array $env
+     * @param array $conf
      * Get env through the config's file with the key env
      */
-    public function setEnv(array $env): void
+    public function setEnv(array $conf): void
     {
-        self::$env = $env['env'];
+        self::$env = $conf['env'];
     }
 }

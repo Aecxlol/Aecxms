@@ -29,18 +29,12 @@ abstract class AbstractController
     private Response $response;
 
     /**
-     * @var string
-     */
-    private string $env;
-
-    /**
      * AbstractController constructor.
      */
     public function __construct()
     {
         $this->setViewDirectory(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR);
         $this->response = DI::getInstance()->get('Response');
-        $this->env      = Config::getEnv();
     }
 
     /**
@@ -54,7 +48,7 @@ abstract class AbstractController
         $layout = $this->viewDirectory . self::LAYOUT;
 
         if (file_exists($file)) {
-            if(!empty($params)) {
+            if (!empty($params)) {
                 extract($params);
             }
             ob_start();
@@ -63,10 +57,10 @@ abstract class AbstractController
             if (file_exists($layout)) {
                 require($layout);
             } else {
-                $this->response->errorOutput($this->env, sprintf('The file %s does not exist in %s', self::LAYOUT, $layout));
+                $this->response->errorOutput(sprintf('The file %s does not exist in %s', self::LAYOUT, $layout));
             }
         } else {
-            $this->response->errorOutput($this->env, sprintf('The file %s does not exist in %s', $view, $file));
+            $this->response->errorOutput(sprintf('The file %s does not exist in %s', $view, $file));
         }
     }
 

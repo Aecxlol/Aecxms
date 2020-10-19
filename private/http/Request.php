@@ -25,7 +25,7 @@ class Request
      */
     public function __construct()
     {
-        $this->pathInfo = $_SERVER['REQUEST_URI'];
+        $this->pathInfo      = $_SERVER['REQUEST_URI'];
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
     }
 
